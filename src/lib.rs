@@ -283,6 +283,7 @@ pub struct Background {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 #[allow(dead_code)]
 pub struct CharSheet {
     pub information: Information,
@@ -292,7 +293,82 @@ pub struct CharSheet {
     pub proficiencies_and_language: ProficienciesAndLanguage,
     pub health: Health,
     pub background: Background,
-    pub classes: Character, //pub traits: Traits,
+    pub character: Character, //pub traits: Traits,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Character {
+    pub classes: Vec<ClassLevel>,
+    // name, race, abilities, etc.
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct SorcererSpellSlot {
+    total_spell_slots: u8,
+    used_spell_slots: u8,
+    /// This might make more sense to just encode as the "slot" of the Vec
+    spell_slot_level: u8,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ClassLevel {
+    //#[default]
+    Barbarian {
+        level: u8,
+        subclass: Option<BarbarianSubclass>,
+        rages_used: u8,
+        totem_spirits: Vec<TotemSpirit>,
+    },
+    Sorcerer {
+        subclass: Option<SorcererSubclass>,
+        level: u8,
+        spell_slots: Vec<SorcererSpellSlot>,
+    },
+    /*    Bard {
+            subclass: Option<BardSubclass>,
+            level: u8,
+        },
+        Cleric {
+            subclass: Option<ClericSubclass>,
+            level: u8,
+        },
+        Druid {
+            subclass: Option<DruidSubclass>,
+            level: u8,
+        },
+        Fighter {
+            subclass: Option<FighterSubclass>,
+            level: u8,
+        },
+        Monk {
+            subclass: Option<MonkSubclass>,
+            level: u8,
+        },
+        Paladin {
+            subclass: Option<PaladinSubclass>,
+            level: u8,
+        },
+        Ranger {
+            subclass: Option<RangerSubclass>,
+            level: u8,
+        },
+        Rogue {
+            subclass: Option<RogueSubclass>,
+            level: u8,
+        },
+        Sorcerer {
+            subclass: Option<SorcererSubclass>,
+            level: u8,
+        },
+        Warlock {
+            subclass: Option<WarlockSubclass>,
+            level: u8,
+        },
+        Wizard {
+            subclass: Option<WizardSubclass>,
+            level: u8,
+        },
+    */
 }
 
 impl Information {
@@ -658,66 +734,6 @@ impl Background {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum ClassLevel {
-    //#[default]
-    Barbarian {
-        level: u8,
-        subclass: Option<BarbarianSubclass>,
-        rages_used: u8,
-        totem_spirits: Vec<TotemSpirit>,
-    },
-    Sorcerer {
-        subclass: Option<SorcererSubclass>,
-        level: u8,
-    },
-    /*    Bard {
-            subclass: Option<BardSubclass>,
-            level: u8,
-        },
-        Cleric {
-            subclass: Option<ClericSubclass>,
-            level: u8,
-        },
-        Druid {
-            subclass: Option<DruidSubclass>,
-            level: u8,
-        },
-        Fighter {
-            subclass: Option<FighterSubclass>,
-            level: u8,
-        },
-        Monk {
-            subclass: Option<MonkSubclass>,
-            level: u8,
-        },
-        Paladin {
-            subclass: Option<PaladinSubclass>,
-            level: u8,
-        },
-        Ranger {
-            subclass: Option<RangerSubclass>,
-            level: u8,
-        },
-        Rogue {
-            subclass: Option<RogueSubclass>,
-            level: u8,
-        },
-        Sorcerer {
-            subclass: Option<SorcererSubclass>,
-            level: u8,
-        },
-        Warlock {
-            subclass: Option<WarlockSubclass>,
-            level: u8,
-        },
-        Wizard {
-            subclass: Option<WizardSubclass>,
-            level: u8,
-        },
-    */
-}
-
 impl ClassLevel {
     #[allow(dead_code)]
     fn default() -> Self {
@@ -779,12 +795,6 @@ pub enum SorcererSubclass {
     DivineSoul,
     ShadowMagic,
     StormSorcery,
-}
-
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
-pub struct Character {
-    pub classes: Vec<ClassLevel>,
-    // name, race, abilities, etc.
 }
 
 impl Character {
@@ -886,124 +896,21 @@ impl Barbarian {
     }
 }
 
-/*
- *
-pub struct CharSheet {
-    pub information: Information,
-    pub statistics: Statistics,
-    pub saving_throws: SavingThrows,
-    pub skills: Skills,
-    pub proficiencies_and_language: ProficienciesAndLanguage,
-    pub health: Health,
-    pub background: Background,
-    pub classes: Character, //pub traits: Traits,
-}
- */
-
 pub fn parse_char_sheet<R: Read>(reader: R) -> Result<CharSheet, Box<dyn std::error::Error>> {
-    // 1. Create a stateful stream deserializer from your reader
     let mut stream = Deserializer::from_reader(reader).into_iter::<serde_json::Value>();
 
-    // 2. Pull out the information, non-vector structs sequentially
-    let information_json = stream.next().ok_or("Missing information struct")??;
-    let information: Information = serde_json::from_value(information_json)?;
-    println!("Parsed Information: {:?}", information);
-
-    let statistics_json = stream.next().ok_or("Missing statistics struct")??;
-    let statistics: Statistics = serde_json::from_value(statistics_json)?;
-    println!("Parsed Statistics: {:?}", statistics);
-
-    let saving_throws_json = stream.next().ok_or("Missing saving throws struct")??;
-    let saving_throws: SavingThrows = serde_json::from_value(saving_throws_json)?;
-    println!("Parsed SavingThrows: {:?}", saving_throws);
-
-    let skills_json = stream.next().ok_or("Missing header")??;
-    let skills: Skills = serde_json::from_value(skills_json)?;
-    println!("Parsed Skills: {:?}", skills);
-
-    let proficiencies_and_language_json = stream.next().ok_or("Missing struct")??;
-    let proficiencies_and_language: ProficienciesAndLanguage =
-        serde_json::from_value(proficiencies_and_language_json)?;
-    println!(
-        "Parsed ProficienciesAndLanguage: {:?}",
-        proficiencies_and_language
-    );
-
-    let health_json = stream.next().ok_or("Missing header")??;
-    let health: Health = serde_json::from_value(health_json)?;
-    println!("Parsed Health: {:?}", health);
-
-    let background_json = stream.next().ok_or("Missing header")??;
-    let background: Background = serde_json::from_value(background_json)?;
-    println!("Parsed Background: {:?}", background);
-
-    let meta_json = stream.next().ok_or("Missing metadata")??;
-    let version: u32 = serde_json::from_value(meta_json)?;
-    println!("Parsed standalone integer: {:?}", version);
-
-    // 3. Pull out the final vector
-    let list_json = stream.next().ok_or("Missing Vec<Chracter>")??;
-    let characters: Vec<ClassLevel> = serde_json::from_value(list_json)?;
-    println!("Parsed Character: {:?}", characters);
-    let classes = Character {
-        classes: characters,
-    };
+    let char_sheet_json = stream.next().ok_or("Missing char_sheet struct")??;
+    let char_sheet: CharSheet = serde_path_to_error::deserialize(&char_sheet_json)
+        .map_err(|e| format!("Error at path `{}`: {}", e.path(), e.inner()))?;
 
     Ok(CharSheet {
-        background,
-        classes,
-        information,
-        proficiencies_and_language,
-        statistics,
-        skills,
-        saving_throws,
-        health,
+        background: char_sheet.background,
+        character: char_sheet.character,
+        information: char_sheet.information,
+        proficiencies_and_language: char_sheet.proficiencies_and_language,
+        statistics: char_sheet.statistics,
+        skills: char_sheet.skills,
+        saving_throws: char_sheet.saving_throws,
+        health: char_sheet.health,
     })
 }
-
-// example of reading static data then a Vec at the end
-/*
- *
- *
- *
- *
-
-#[derive(Deserialize, Debug)]
-struct Header {
-    version: u32,
-    source: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct Item {
-    id: u32,
-    value: String,
-}
-
-fn parse_stream<R: Read>(reader: R) -> Result<(), Box<dyn std::error::Error>> {
-    // 1. Create a stateful stream deserializer from your reader
-    let mut stream = Deserializer::from_reader(reader).into_iter::<serde_json::Value>();
-
-    // 2. Pull out the individual, non-vector structs sequentially
-    let header_json = stream.next().ok_or("Missing header")??;
-    let header: Header = serde_json::from_value(header_json)?;
-    println!("Parsed Header: {:?}", header);
-
-    let meta_json = stream.next().ok_or("Missing metadata")??;
-    let version: u32 = serde_json::from_value(meta_json)?;
-    println!("Parsed standalone integer: {:?}", version);
-
-    // 3. Pull out the final vector
-    let list_json = stream.next().ok_or("Missing final vector")??;
-    let items: Vec<Item> = serde_json::from_value(list_json)?;
-    println!("Parsed Vector: {:?}", items);
-
-    Ok(())
-}
-
- *
- *
- *
- *
- *
- */
