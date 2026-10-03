@@ -1,6 +1,4 @@
 use serde::{Deserialize, Serialize};
-// TODO: before pushing this change this lib to not rely on ratatui... lol
-use ratatui::widgets::ListItem;
 
 use serde_json::Deserializer;
 use std::io::Read;
@@ -373,15 +371,15 @@ pub enum ClassLevel {
 
 impl Information {
     #[allow(dead_code)]
-    pub fn information_to_list_item(&self) -> Vec<ListItem<'static>> {
+    pub fn information_to_vec(&self) -> Vec<String> {
         vec![
-            ListItem::new(format!("Char Name: {}", self.character_name)),
-            ListItem::new(format!("Class: {}", self.class)),
-            ListItem::new(format!("Level: {}", self.level)),
-            ListItem::new(format!("Player Name: {}", self.player_name)),
-            ListItem::new(format!("Race: {}", self.race)),
-            ListItem::new(format!("Alignment: {}", self.alignment)),
-            ListItem::new(format!("Experience: {}", self.experience)),
+            format!("Char Name: {}", self.character_name),
+            format!("Class: {}", self.class),
+            format!("Level: {}", self.level),
+            format!("Player Name: {}", self.player_name),
+            format!("Race: {}", self.race),
+            format!("Alignment: {}", self.alignment),
+            format!("Experience: {}", self.experience),
         ]
     }
 }
@@ -712,24 +710,24 @@ impl Statistics {
 }
 
 impl ProficienciesAndLanguage {
-    pub fn profs_and_lang_to_list_item(&self) -> Vec<ListItem<'static>> {
+    pub fn profs_and_lang_to_list_item(&self) -> Vec<String> {
         vec![
-            ListItem::new(format!("Languages Known: {}", self.languages_known)),
-            ListItem::new(format!("Armor Proficiency: {}", self.armor_proficiency)),
-            ListItem::new(format!("Tools Proficiency: {}", self.tools_proficiency)),
-            ListItem::new(format!("Weapon Proficiency: {}", self.weapon_proficiency)),
+            format!("Languages Known: {}", self.languages_known),
+            format!("Armor Proficiency: {}", self.armor_proficiency),
+            format!("Tools Proficiency: {}", self.tools_proficiency),
+            format!("Weapon Proficiency: {}", self.weapon_proficiency),
         ]
     }
 }
 
 impl Background {
-    pub fn background_to_list_item(&self) -> Vec<ListItem<'static>> {
+    pub fn background_to_list_item(&self) -> Vec<String> {
         vec![
-            ListItem::new(format!("Background: {}", self.background)),
-            ListItem::new(format!("Personality Traits: {}", self.personality_traits)),
-            ListItem::new(format!("Ideals: {}", self.ideals)),
-            ListItem::new(format!("Bonds: {}", self.bonds)),
-            ListItem::new(format!("Flaws: {}", self.flaws)),
+            format!("Background: {}", self.background),
+            format!("Personality Traits: {}", self.personality_traits),
+            format!("Ideals: {}", self.ideals),
+            format!("Bonds: {}", self.bonds),
+            format!("Flaws: {}", self.flaws),
         ]
     }
 }
