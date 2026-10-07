@@ -167,7 +167,6 @@ pub struct StatView {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct Information {
     pub character_name: String,
     pub class: String,
@@ -193,7 +192,6 @@ pub struct Statistics {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct SavingThrows {
     pub strength_proficent: bool,
     pub dexterity_proficent: bool,
@@ -204,7 +202,6 @@ pub struct SavingThrows {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct Skills {
     pub acrobatics: String,
     pub animal_handling: String,
@@ -244,7 +241,6 @@ pub struct Skills {
     pub survival_skill: String,
 }
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct ProficienciesAndLanguage {
     pub languages_known: String,
     pub armor_proficiency: String,
@@ -252,7 +248,6 @@ pub struct ProficienciesAndLanguage {
     pub tools_proficiency: String,
 }
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct Health {
     pub armor_class: u8,
     pub initiative: String,
@@ -270,7 +265,6 @@ pub struct Health {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[allow(dead_code)]
 pub struct Background {
     background: String,
     background_fulltext: String,
@@ -282,7 +276,6 @@ pub struct Background {
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-#[allow(dead_code)]
 pub struct CharSheet {
     pub information: Information,
     pub statistics: Statistics,
@@ -370,7 +363,6 @@ pub enum ClassLevel {
 }
 
 impl Information {
-    #[allow(dead_code)]
     pub fn information_to_vec(&self) -> Vec<String> {
         vec![
             format!("Char Name: {}", self.character_name),
@@ -710,7 +702,7 @@ impl Statistics {
 }
 
 impl ProficienciesAndLanguage {
-    pub fn profs_and_lang_to_list_item(&self) -> Vec<String> {
+    pub fn profs_and_lang_to_vec(&self) -> Vec<String> {
         vec![
             format!("Languages Known: {}", self.languages_known),
             format!("Armor Proficiency: {}", self.armor_proficiency),
@@ -721,7 +713,7 @@ impl ProficienciesAndLanguage {
 }
 
 impl Background {
-    pub fn background_to_list_item(&self) -> Vec<String> {
+    pub fn background_to_vec(&self) -> Vec<String> {
         vec![
             format!("Background: {}", self.background),
             format!("Personality Traits: {}", self.personality_traits),
@@ -759,6 +751,26 @@ impl ClassLevel {
                         | ClassLevel::Warlock { level, .. }
                         | ClassLevel::Wizard { level, .. } => *level,
             */
+        }
+    }
+
+    pub fn class_text(&self) -> Vec<String> {
+        match self {
+            ClassLevel::Barbarian {
+                level: _,
+                subclass: _,
+                rages_used: _,
+                totem_spirits: _,
+            } => {
+                Barbarian::class_text()
+                //println!("class_text baribarian\n");
+                //self.class_text()
+            }
+            ClassLevel::Sorcerer {
+                level: _,
+                subclass: _,
+                spell_slots: _,
+            } => Sorcerer::class_text(),
         }
     }
 }
@@ -848,6 +860,21 @@ impl Barbarian {
         }
     }
 
+    pub fn class_text() -> Vec<String> {
+        vec![
+            "RAGE: As a bonus action enter a rage for up to 1 minute (10 rounds). You gain advantage on STR checks and saving throws, and +2 melee damage with STR weapons, resistance to bludgeoning, piercing, slashing damage. You can't cast or concentrate on spells while raging. Your rage ends early if you are knocked unconscious or if your turn ends and you haven’t attacked a hostile creature since your last turn or taken damage since then. You may end your rage as a bonus action.".to_string(),
+            "".to_string(),
+            "Unarmored Defense - While not wearing armor, your AC is 10 + DEX modifier + CON modifier + any shield bonus.".to_string(),
+            "".to_string(),
+            "Reckless Attack - When you make your first attack on each turn, you can attack recklessly, giving you advantage on melee weapon attack rolls using STR during this turn, attack rolls against you also have advantage until your next turn.".to_string(),
+            "".to_string(),
+            "Danger Sense - You have advantage on DEX saving throws against effects that you can see while not blinded, deafened, or incapacitated.".to_string(),
+            "".to_string(),
+            // TODO: Represent the skill the user picked and then display it here.
+            "Primal Knowledge - When you reach 3rd level and again at 10th level, you gain proficiency in one skill of your choice from the list of skills available to barbarians at 1st level.".to_string()
+        ]
+    }
+
     /// Number of rages per long rest, per the PHB table.
     /// Returns None at level 20 (unlimited rages).
     pub fn rages_per_long_rest(&self) -> Option<u8> {
@@ -911,4 +938,37 @@ pub fn parse_char_sheet<R: Read>(reader: R) -> Result<CharSheet, Box<dyn std::er
         saving_throws: char_sheet.saving_throws,
         health: char_sheet.health,
     })
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Sorcerer {
+    pub level: u8,
+    pub subclass: Option<BarbarianSubclass>,
+
+    /// How many spell slots the sorcerer has for each sleep level and how many they
+    /// have left since the last rest.
+    spell_slots: Vec<SorcererSpellSlot>,
+}
+
+impl Sorcerer {
+    #[allow(dead_code)]
+    fn default() -> Self {
+        Self {
+            subclass: None,
+            level: 1,
+            spell_slots: Vec::new(),
+        }
+    }
+
+    pub fn new(level: u8) -> Self {
+        Self {
+            level,
+            subclass: None,
+            spell_slots: Vec::new(),
+        }
+    }
+
+    pub fn class_text() -> Vec<String> {
+        vec!["<TODO fill this in for Sorcerer>".to_string()]
+    }
 }
