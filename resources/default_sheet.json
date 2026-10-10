@@ -1,0 +1,100 @@
+{
+  "information": {
+    "character_name": "fill in",
+    "class": "",
+    "level": 1,
+    "player_name": "",
+    "race": "",
+    "alignment": "",
+    "experience": ""
+  },
+  "statistics": {
+    "strength": 1,
+    "dexterity": 1,
+    "constitution": 1,
+    "intelligence": 1,
+    "wisdom": 1,
+    "charisma": 1,
+    "inspiration": false,
+    "proficiency_bonus": 1,
+    "passive_wisdom_perception": 11
+  },
+  "saving_throws": {
+    "strength_proficent": false,
+    "dexterity_proficent": false,
+    "constitution_proficent": false,
+    "intelligence_proficent": false,
+    "wisdom_proficent": false,
+    "charisma_proficent": false
+  },
+  "skills": {
+    "acrobatics": "+2",
+    "animal_handling": "+4",
+    "arcana": "+1",
+    "athletics": "+7",
+    "deception": "+1",
+    "history": "+1",
+    "insight": "+1",
+    "intimidation": "+4",
+    "investigation": "+1",
+    "medicine": "+1",
+    "nature": "+4",
+    "perception": "+4",
+    "performance": "+1",
+    "persuasion": "+1",
+    "religion": "+1",
+    "slight_of_hand": "+2",
+    "stealth": "+2",
+    "survival": "+4",
+    "acrobatics_skill": "",
+    "animal_handling_skill": "proficient",
+    "arcana_skill": "",
+    "athletics_skill": "expertise",
+    "deception_skill": "",
+    "history_skill": "",
+    "insight_skill": "",
+    "intimidation_skill": "",
+    "investigation_skill": "",
+    "medicine_skill": "",
+    "nature_skill": "proficient",
+    "perception_skill": "proficient",
+    "performance_skill": "",
+    "persuasion_skill": "",
+    "religion_skill": "",
+    "slight_of_hand_skill": "",
+    "stealth_skill": "",
+    "survival_skill": "proficient"
+  },
+  "proficiencies_and_language": {
+    "languages_known": "",
+    "armor_proficiency": "",
+    "weapon_proficiency": "",
+    "tools_proficiency": ""
+  },
+  "health": {
+    "armor_class": 16,
+    "initiative": "+2",
+    "speed": 40,
+    "current_hp": 0,
+    "maximum_hp": 10,
+    "temporary_hp": 0,
+    "short_rests": 1,
+    "hit_dice_type": "d6",
+    "total_hit_dice": 6,
+    "current_hit_dice": 6,
+    "unconscious": false,
+    "death_save_saves": "0/3",
+    "death_save_fails": "0/3"
+  },
+  "background": {
+    "background": "",
+    "background_fulltext": "",
+    "personality_traits": "",
+    "ideals": "",
+    "bonds": "",
+    "flaws": ""
+  },
+  "character": {
+    "classes": []
+  }
+}
