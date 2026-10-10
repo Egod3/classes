@@ -761,11 +761,7 @@ impl ClassLevel {
                 subclass: _,
                 rages_used: _,
                 totem_spirits: _,
-            } => {
-                Barbarian::class_text()
-                //println!("class_text baribarian\n");
-                //self.class_text()
-            }
+            } => Barbarian::class_text(),
             ClassLevel::Sorcerer {
                 level: _,
                 subclass: _,
