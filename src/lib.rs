@@ -27,6 +27,7 @@ mod tests {
         h.increase();
         h.increase();
         assert_eq!(h.current_hp, 10);
+        assert_eq!(h.temporary_hp, 1);
     }
 
     #[test]
@@ -49,6 +50,30 @@ mod tests {
         h.decrease();
         h.decrease();
         assert_eq!(h.current_hp, 0);
+    }
+
+    #[test]
+    fn hp_decrease_temp_hp() {
+        let mut h = Health {
+            armor_class: 0,
+            initiative: "+1".to_string(),
+            speed: 30,
+            current_hp: 10,
+            maximum_hp: 10,
+            temporary_hp: 2,
+            short_rests: 1,
+            hit_dice_type: "d12".to_string(),
+            total_hit_dice: 6,
+            current_hit_dice: 6,
+            unconscious: false,
+            death_save_saves: "".to_string(),
+            death_save_fails: "".to_string(),
+        };
+        h.decrease();
+        h.decrease();
+        h.decrease();
+        assert_eq!(h.temporary_hp, 0);
+        assert_eq!(h.current_hp, 9);
     }
 
     #[test]
