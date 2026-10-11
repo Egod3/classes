@@ -21,8 +21,8 @@ mod tests {
             total_hit_dice: 6,
             current_hit_dice: 6,
             unconscious: false,
-            death_save_saves: "".to_string(),
-            death_save_fails: "".to_string(),
+            death_save_saves: 0,
+            death_save_fails: 0,
         };
         h.increase();
         h.increase();
@@ -44,8 +44,8 @@ mod tests {
             total_hit_dice: 6,
             current_hit_dice: 6,
             unconscious: false,
-            death_save_saves: "".to_string(),
-            death_save_fails: "".to_string(),
+            death_save_saves: 0,
+            death_save_fails: 0,
         };
         h.decrease();
         h.decrease();
@@ -66,8 +66,8 @@ mod tests {
             total_hit_dice: 6,
             current_hit_dice: 6,
             unconscious: false,
-            death_save_saves: "".to_string(),
-            death_save_fails: "".to_string(),
+            death_save_saves: 0,
+            death_save_fails: 0,
         };
         h.decrease();
         h.decrease();
@@ -285,8 +285,8 @@ pub struct Health {
     pub total_hit_dice: u8,
     pub current_hit_dice: u8,
     pub unconscious: bool,
-    pub death_save_saves: String,
-    pub death_save_fails: String,
+    pub death_save_saves: u8,
+    pub death_save_fails: u8,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]

@@ -83,8 +83,8 @@
     "total_hit_dice": 6,
     "current_hit_dice": 6,
     "unconscious": false,
-    "death_save_saves": "0/3",
-    "death_save_fails": "0/3"
+    "death_save_saves": 0,
+    "death_save_fails": 0
   },
   "background": {
     "background": "",
