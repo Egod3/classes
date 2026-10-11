@@ -406,6 +406,11 @@ impl Health {
         if self.current_hp == self.maximum_hp {
             self.temporary_hp += 1;
         }
+        if self.current_hp == 0 {
+            // Reset death saves/fails
+            self.death_save_saves = 0;
+            self.death_save_fails = 0;
+        }
         self.current_hp = (self.current_hp + 1).min(self.maximum_hp);
     }
 
