@@ -757,16 +757,16 @@ impl ClassLevel {
     pub fn class_text(&self) -> Vec<String> {
         match self {
             ClassLevel::Barbarian {
-                level: _,
+                level,
                 subclass: _,
                 rages_used: _,
                 totem_spirits: _,
-            } => Barbarian::class_text(),
+            } => Barbarian::class_text(*level),
             ClassLevel::Sorcerer {
-                level: _,
+                level,
                 subclass: _,
                 spell_slots: _,
-            } => Sorcerer::class_text(),
+            } => Sorcerer::class_text(*level),
         }
     }
 }
@@ -856,19 +856,38 @@ impl Barbarian {
         }
     }
 
-    pub fn class_text() -> Vec<String> {
-        vec![
+    pub fn class_text(level: u8) -> Vec<String> {
+        let mut class_text = vec![
             "RAGE: As a bonus action enter a rage for up to 1 minute (10 rounds). You gain advantage on STR checks and saving throws, and +2 melee damage with STR weapons, resistance to bludgeoning, piercing, slashing damage. You can't cast or concentrate on spells while raging. Your rage ends early if you are knocked unconscious or if your turn ends and you haven’t attacked a hostile creature since your last turn or taken damage since then. You may end your rage as a bonus action.".to_string(),
             "".to_string(),
             "Unarmored Defense - While not wearing armor, your AC is 10 + DEX modifier + CON modifier + any shield bonus.".to_string(),
             "".to_string(),
+        ];
+        if level >= 2 {
+            class_text.push(
             "Reckless Attack - When you make your first attack on each turn, you can attack recklessly, giving you advantage on melee weapon attack rolls using STR during this turn, attack rolls against you also have advantage until your next turn.".to_string(),
-            "".to_string(),
-            "Danger Sense - You have advantage on DEX saving throws against effects that you can see while not blinded, deafened, or incapacitated.".to_string(),
-            "".to_string(),
+            );
+            class_text.push("".to_string());
+            class_text.push("Danger Sense - You have advantage on DEX saving throws against effects that you can see while not blinded, deafened, or incapacitated.".to_string());
+            class_text.push("".to_string());
+        }
+        if level >= 3 {
             // TODO: Represent the skill the user picked and then display it here.
-            "Primal Knowledge - When you reach 3rd level and again at 10th level, you gain proficiency in one skill of your choice from the list of skills available to barbarians at 1st level.".to_string()
-        ]
+            class_text.push(
+            "Primal Knowledge - When you reach 3rd level and again at 10th level, you gain proficiency in one skill of your choice from the list of skills available to barbarians at 1st level.".to_string());
+            class_text.push("".to_string());
+        }
+        if level >= 5 {
+            class_text.push("Extra Attack - At 5th level, you can attack twice, whenever you take the Attack action on your turn.".to_string());
+            class_text.push("".to_string());
+            class_text.push("Fast Movement - Starting at 5th level, your speed increases by 10 feet while you aren’t wearing heavy armor.".to_string());
+            class_text.push("".to_string());
+        }
+        if level >= 7 {
+            class_text.push("Feral Instinct - By 7th level, your instincts are so honed that you have advantage on initiative rolls.  Additionally, if you are surprised at the beginning of combat and aren’t incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn.".to_string());
+            class_text.push("".to_string());
+        }
+        class_text
     }
 
     /// Number of rages per long rest, per the PHB table.
@@ -964,7 +983,23 @@ impl Sorcerer {
         }
     }
 
-    pub fn class_text() -> Vec<String> {
-        vec!["<TODO fill this in for Sorcerer>".to_string()]
+    pub fn class_text(level: u8) -> Vec<String> {
+        let mut class_text = vec![
+            // TODO: i need to pass the Spell DC and Spell Attack into this function?
+            "Spellcasting: You can cast known sorcerer spells using CHA as your spellcasting modifier (Spell DC 17, Spell Attack +9). You can use an arcane focus as a spellcasting focus.".to_string(),
+            "".to_string(),
+        ];
+        if level >= 2 {
+            class_text.push(
+                format!("Font of Magic - You have {} sorcery points that you regain when you finish a long rest. You can use your sorcery points to gain additional spell slots or sacrifice spell slots to gain additional sorcery points as a bonus action.", level),
+            );
+            class_text.push("".to_string());
+        }
+        if level >= 3 {
+            class_text.push(
+                "MetaMagic - You gain the ability to bend spells to suit your needs.".to_string(),
+            );
+        }
+        class_text
     }
 }
